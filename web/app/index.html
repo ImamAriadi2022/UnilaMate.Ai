@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tugas MSIB - Dark Mode</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .container {
+            display: flex;
+            height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #333;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-content {
+            flex-grow: 2;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .task-details {
+            width: 300px;
+            background-color: #333;
+            padding: 20px;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .task-details.hidden {
+            width: 0;
+            padding: 0;
+            overflow: hidden;
+            box-shadow: none;
+        }
+
+        #close-details-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #fff;
+        }
+
+        .task-details {
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        .task-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .task-item {
+            cursor: pointer;
+            margin: 10px 0;
+        }
+
+        .task-desk {
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+        }
+
+        .title-side {
+            padding-top: 40px;
+        }
+
+        /* Button tambah tugas di main content */
+        .new-list-btn {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .form-section {
+            display: none;
+        }
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1e1e1e; /* Full dark background */
+            color: #f3f3f3;
+            display: flex;
+            height: 100vh;
+        }
+        
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 20%;
+            background-color: #2e2e2e;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 3px 0 5px rgba(0, 0, 0, 0.2);
+            height: 100vh; /* Ensuring the sidebar takes full height */
+        }
+        
+        .profile {
+            margin-bottom: 30px;
+        }
+        
+        .avatar {
+            width: 50px;
+            height: 50px;
+            background-color: #555;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+        
+        .name {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .email {
+            font-size: 14px;
+            color: #bbb;
+        }
+        
+        .menu {
+            list-style: none;
+        }
+        
+        
+        .menu li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            display: block;
+            padding: 10px 0;
+        }
+        
+        .menu li a:hover {
+            background-color: #3c3c3c;
+            padding-left: 10px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        
+        .new-list-btn {
+            background-color: #444;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: auto; /* Ensuring button stays at the bottom */
+        }
+        
+        .new-list-btn:hover {
+            background-color: #555;
+            transition: 0.3s;
+        }
+        
+        /* Main Content */
+        .main-content {
+            width: 50%;
+            padding: 20px;
+            background-color: #2a2a2a;
+            color: white;
+            box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+        }
+        
+        .main-content h2 {
+            margin-bottom: 20px;
+            color: #f3f3f3;
+        }
+        
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .task-item {
+            background-color: #3c3c3c;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .task-item:hover {
+            background-color: #505050;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Task Details */
+        .task-details {
+            width: 30%;
+            padding: 20px;
+            background-color: #333;
+            box-shadow: -3px 0 5px rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+        
+        .task-details h3 {
+            margin-bottom: 20px;
+            color: #f3f3f3;
+        }
+        
+        .task-details button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            background-color: #444;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .task-details button:hover {
+            background-color: #555;
+        }
+        
+        /* Make sure the entire background is filled */
+        html, body {
+            height: 100%;
+        }
+        
+        .container {
+            height: 100%;
+        }
+        
+        
+        /* style form */
+        /* Styles for the psychology test form */
+        .form-section {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-section h3 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #fff;
+        }
+        
+        .form-section form {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-section label {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+        
+        .form-section input[type="radio"] {
+            margin-right: 10px;
+        }
+        
+        .form-section input[type="radio"] + label {
+            margin-right: 20px;
+        }
+        
+        .form-section button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .form-section button:hover {
+            background-color: #555;
+        }
+        
+        .form-bagian{
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <section class="profile">
+                <div class="avatar"></div>
+                <p class="name">Imam Ariadi</p>
+                <p class="email">imamariadi775@gmail.com</p>
+            </section>
+            <nav>
+                <ul class="menu">
+                    <li><a href="#" id="menu-penting">Penting</a></li>
+                    <li><a href="#" id="menu-kegiatan">Kegiatan</a></li>
+                    <li><a href="#" id="menu-daftar-tugas">Daftar Tugas</a></li>
+                    <li><a href="#" id="menu-mengenali-diri">Mengenali Diri</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" id="main-content">
+            <header>
+                <h2 id="main-title">Daftar Tugas</h2>
+                <button class="new-list-btn" id="new-task-btn">+ Tugas Baru</button> <!-- Tombol tambah tugas -->
+            </header>
+            <section id="content-section">
+                <ul class="task-list" id="task-list">
+                    <!-- List tugas akan diisi dari database -->
+                </ul>
+            </section>
+            <section id="psychology-test" class="form-section">
+                <h3>Formulir Tes Psikologi</h3>
+                <form>
+                    <div class="form-bagian">
+                        <label for="question1">Apakah Anda merasa cemas ketika menghadapi situasi baru?</label><br>
+                        <input type="radio" name="q1" value="yes"> Ya
+                        <input type="radio" name="q1" value="no"> Tidak<br><br>
+                    </div>
+                    <div class="form-bagian"></div>
+                        <label for="question2">Bagaimana Anda menghadapi tekanan pekerjaan?</label><br>
+                        <input type="radio" name="q2" value="calm"> Tetap Tenang
+                        <input type="radio" name="q2" value="stress"> Menjadi Stres<br><br>
+                    </div>
+                    <div>
+                        <button type="submit">Kirim</button>
+                    </div>
+                </form>
+            </section>
+        </main>
+
+        <!-- Task Details -->
+        <aside class="task-details hidden" id="task-details">
+            <header class="task-desk">
+                <button id="close-details-btn">&times;</button> <!-- Tombol X untuk close -->
+                <div class="title-side">
+                    <h3 id="task-title">Pilih tugas untuk melihat detail</h3>
+                </div>
+            </header>
+            <section>
+                <button>Tambahkan ke Hari Saya</button>
+                <button>Ingatkan saya</button>
+                <button>Tambah tenggat</button>
+                <button>Ulangi</button>
+                <button>Tugaskan ke</button>
+                <button>Tambahkan catatan</button>
+                <button id="edit-details-btn" disabled>Edit Penjelasan</button>
+                <p id="task-description">Detail tentang tugas akan muncul di sini.</p>
+                <button id="delete-task-btn">Tugas Selesai</button> <!-- Tombol hapus tugas -->
+            </section>
+        </aside>
+    </div>
+
+    <script>
+        const tasks = [
+            { id: 1, title: 'Test administrasi ruang guru', description: 'Detail tugas administrasi' },
+            { id: 2, title: 'Course.net', description: 'Selesaikan materi di course.net' },
+            { id: 3, title: 'Learning X', description: 'Pelajari modul Learning X' },
+            { id: 4, title: 'Ruang guru fullstack', description: 'Pelajari fullstack development' },
+            { id: 5, title: 'Mari belajar', description: 'Mulai pembelajaran hari ini' }
+        ];
+
+        let selectedTaskId = null;
+
+        // Fungsi untuk render daftar tugas
+        function renderTasks() {
+            const taskList = document.getElementById('task-list');
+            taskList.innerHTML = ''; // Kosongkan sebelum render
+
+            tasks.forEach(task => {
+                const li = document.createElement('li');
+                li.className = 'task-item';
+                li.textContent = task.title;
+                li.addEventListener('click', () => showTaskDetails(task));
+                taskList.appendChild(li);
+            });
+        }
+
+        function updateMainContent(title, sectionToShow) {
+            document.getElementById('main-title').textContent = title;
+            document.querySelectorAll('.form-section, .task-list').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById(sectionToShow).style.display = 'block';
+        }
+
+        // Fungsi untuk event pada menu
+        document.getElementById('menu-daftar-tugas').addEventListener('click', function() {
+            updateMainContent('Daftar Tugas', 'task-list');
+        });
+
+        document.getElementById('menu-penting').addEventListener('click', function() {
+            updateMainContent('Penting', 'task-list'); // Tampilkan daftar tugas mendekati deadline
+        });
+
+        document.getElementById('menu-kegiatan').addEventListener('click', function() {
+            updateMainContent('Kegiatan', 'task-list'); // Tampilkan kegiatan yang akan datang
+        });
+
+        document.getElementById('menu-mengenali-diri').addEventListener('click', function() {
+            updateMainContent('Mengenali Diri', 'psychology-test'); // Tampilkan form pertanyaan psikologi
+        });
+
+        // Fungsi untuk menampilkan detail tugas
+        function showTaskDetails(task) {
+            selectedTaskId = task.id; // Simpan ID tugas yang dipilih
+            const taskDetails = document.getElementById('task-details');
+            taskDetails.classList.remove('hidden'); // Tampilkan bar kanan
+            document.getElementById('task-title').textContent = task.title;
+            document.getElementById('task-description').textContent = task.description;
+            document.getElementById('edit-details-btn').disabled = false;
+
+            document.getElementById('edit-details-btn').onclick = function() {
+                editTaskDescription(task);
+            };
+
+            const mainContent = document.getElementById('main-content');
+            mainContent.style.flexGrow = '1'; // Reset flex saat task details muncul
+        }
+
+        // Fungsi untuk mengedit deskripsi tugas
+        function editTaskDescription(task) {
+            const newDescription = prompt('Edit detail tugas:', task.description);
+            if (newDescription !== null) {
+                task.description = newDescription;
+                document.getElementById('task-description').textContent = newDescription;
+            }
+        }
+
+        // Fungsi untuk menutup task details
+        document.getElementById('close-details-btn').addEventListener('click', function() {
+            const taskDetails = document.getElementById('task-details');
+            taskDetails.classList.add('hidden'); // Sembunyikan task details
+            document.getElementById('main-content').style.flexGrow = '2'; // Kembalikan flex-grow konten utama
+        });
+
+        renderTasks(); // Panggil fungsi untuk render tugas saat halaman dimuat
+    </script>
+</body>
+</html>
